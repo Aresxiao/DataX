@@ -86,6 +86,7 @@ public class MongoDBReader extends Reader {
 
         @Override
         public void startRead(RecordSender recordSender) {
+            System.out.println("database:" + database + ",authDBName:" + authDBName + ",password:" + password);
 
             if(batchSize == null ||
                              mongoClient == null || database == null ||
@@ -124,9 +125,9 @@ public class MongoDBReader extends Reader {
                         JSONObject column = (JSONObject)columnItera.next();
                         Object tempCol = item.get(column.getString(KeyConstant.COLUMN_NAME));
                         if (tempCol == null) {
-                            continue;
+                            record.addColumn(new StringColumn(""));
                         }
-                        if (tempCol instanceof Double) {
+                        else if (tempCol instanceof Double) {
                             record.addColumn(new DoubleColumn((Double) tempCol));
                         } else if (tempCol instanceof Boolean) {
                             record.addColumn(new BoolColumn((Boolean) tempCol));
